@@ -63,6 +63,8 @@
                 margin-bottom: 30px;
             }
         </style>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+        <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     </head>
     <body>
         <div class="flex-center position-ref full-height">
@@ -91,5 +93,20 @@
                 </div>
             </div>
         </div>
+
+        <script>
+            $(function () {
+                var socket = io('http://ktpm.test:8043');
+
+                socket.on('connection', function(socket){
+                    socket.emit('sendMessageToOthers', 'I\'m in');
+                });
+
+                socket.on('newMessage', function(msg){
+                    console.log(msg);
+                });
+            });
+        </script>
+
     </body>
 </html>
