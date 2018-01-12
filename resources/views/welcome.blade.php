@@ -63,6 +63,9 @@
                 margin-bottom: 30px;
             }
         </style>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     </head>
     <body>
         <div class="flex-center position-ref full-height">
@@ -91,5 +94,15 @@
                 </div>
             </div>
         </div>
+    <script>
+        var socket = io('ws://localhost:3000');
+
+//        socket.emit('sendMessageToOthers', 'I\'m in');
+
+        socket.on('message', function(msg){
+            console.log(msg);
+            $('body').append(msg);
+        });
+    </script>
     </body>
 </html>
