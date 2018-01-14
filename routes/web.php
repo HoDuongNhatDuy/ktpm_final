@@ -16,3 +16,8 @@ Route::get('/', function () {
 });
 
 Route::get('/send-message', 'SocketController@sendMessage');
+
+Route::get('/subjects', 'HomeController@getSubjects');
+Route::post('/register-subject', 'HomeController@registerSubject');
+
+Route::post('/subscribe-subject', 'HomeController@subscribeSubject');
