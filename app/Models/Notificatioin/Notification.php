@@ -10,8 +10,8 @@ class Notification
 			$subjects = $subscriber->subjects();
 			foreach ($subjects as $subject) {
 				$keyWord = $subject->keyword;
-				if (self::isMatch($message, $subjects)) {
-					$subscriber->notify($keyWord, $message);
+				if (self::isMatch($message, $keyWord)) {
+					$subscriber->notify($message);
 				}
 			}
 		}

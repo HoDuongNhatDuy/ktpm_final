@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Notification\Notification;
 use App\Models\Notification\Subscriber;
+use App\Models\Notification\SubscribeSubject;
+use App\Models\Subject;
+use App\Models\SubjectRegistration;
 use App\Models\User;
 use App\MsgBroker\DefaultCopyOperator;
 use App\MsgBroker\FlexibleObject;
@@ -81,5 +84,53 @@ class HomController extends Controller {
 		$result = $dstStudent->parse();
 
 		return json_encode($result);
+	}
+
+	public function registerSubject(Request $request) {
+		$username = $request->get('username');
+		$subjectKey = $request->get('subject_key');
+		$subject = Subject::where('key', '=', $subjectKey)->first();
+
+		$subjectRegistrations = SubjectRegistration::where('subject_key', '=', $subjectKey)->get();
+
+		if (count($subjectRegistrations) >= $subject->amount) {
+			return json_encode([
+				'status' => 0,
+				'message' => 'Error has occurred'
+			]);
+		}
+
+		SubjectRegistration::create( [
+			'username'    => $username,
+			'subject_key' => $subjectKey
+		] );
+
+		return json_encode([
+			'status' => 1,
+			'message' => 'Registered successfully'
+		]);
+	}
+
+	public function getSubjects() {
+		$subjects = Subject::all();
+		return json_encode([
+			'status' => 1,
+			'data' => $subjects
+		]);
+	}
+
+	public function subscribeSubject(Request $request) {
+		$username = $request->get('username');
+		$keyword = $request->get('keyword');
+
+		SubscribeSubject::create([
+			'username' => $username,
+			'keyword' => $keyword
+		]);
+
+		return json_encode([
+			'status' => 1,
+			'message' => 'Subscribed successfully'
+		]);
 	}
 }

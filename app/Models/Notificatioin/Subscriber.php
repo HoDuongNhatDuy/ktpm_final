@@ -2,6 +2,7 @@
 
 namespace App\Models\Notification;
 
+use App\Models\User;
 use Redis;
 
 class Subscriber extends User
@@ -11,6 +12,13 @@ class Subscriber extends User
 
 		$channel = $this->name . "_$keyword";
 		$redis->publish($channel, $message);
+
+		// send email
+		$user = $this;
+		Mail::send('emails.email', compact('message'),function($message) use($message, $user){
+			$message->to($user->email);
+			$message->subject($message);
+		});
 	}
 
 	public function subjects() {
